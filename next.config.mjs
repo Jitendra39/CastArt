@@ -6,21 +6,28 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'lovely-flamingo-139.convex.cloud',
+        protocol: "https",
+        hostname: "img.clerk.com",
       },
       {
-        protocol: 'https',
-        hostname: 'sleek-capybara-771.convex.cloud',
+        protocol: "https",
+        hostname: "oaidalleapiprodscus.blob.core.windows.net",
       },
       {
-        protocol: 'https',
-        hostname: 'img.clerk.com',
+        protocol: "https",
+        hostname: "lovely-flamingo-139.convex.cloud",
       },
-      // Allow all protocols and hostnames
       {
-        protocol: '**', // Matches any protocol (http, https, etc.)
-        hostname: '**', // Matches any domain
+        protocol: "https",
+        hostname: "notable-viper-311.convex.cloud",
+      },
+      {
+        protocol: "https",
+        hostname: "sleek-capybara-771.convex.cloud",
+      },
+      {
+        protocol: "https",
+        hostname: "img.clerk.com",
       },
     ],
   },

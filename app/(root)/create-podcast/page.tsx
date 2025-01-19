@@ -179,7 +179,7 @@ const CreatePodcast = () => {
         audioDuration,
       });
       toast({
-        title: "Podcast created successfully",
+        title: "CastArt created successfully",
       });
       setIsSubmitting(false);
       router.push(`/podcast/${podcast}`);

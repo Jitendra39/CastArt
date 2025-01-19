@@ -3,16 +3,16 @@ import { Manrope } from "next/font/google";
 import "./globals.css";
 import ConvexClerkProvider from "./provider/ConvexClerkProvider";
 import AudioProvider from "./provider/AudioProvider";
- 
-const manrope = Manrope({subsets: ["latin"]})
+
+const manrope = Manrope({ subsets: ["latin"] })
 
 
 
 export const metadata: Metadata = {
-  title: "Podcastr",
+  title: "CastArt",
   description: "Generate your podcast using AI",
-  icons:{
-    icon:'/icons/logo.svg'
+  icons: {
+    icon: '/icons/logo.svg'
   }
 };
 
@@ -23,13 +23,13 @@ export default function RootLayout({
 }>) {
   return (
     <ConvexClerkProvider>
-    <html lang="en">
-      <AudioProvider>
-      <body className={`${manrope.className}`}>
-              {children}
+      <html lang="en">
+        <AudioProvider>
+          <body className={`${manrope.className}`}>
+            {children}
           </body>
-      </AudioProvider>
-    </html>
+        </AudioProvider>
+      </html>
     </ConvexClerkProvider>
 
   );

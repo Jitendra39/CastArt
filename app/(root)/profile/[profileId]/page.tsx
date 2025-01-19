@@ -15,7 +15,7 @@ const ProfilePage = ({
     profileId: string;
   };
 }) => {
-  const user = useQuery(api.users.getUserById, {
+  const user = useQuery(api.users?.getUserById, {
     clerkId: params.profileId,
   });
   const podcastsData = useQuery(api.podcast.getPodcastByAuthorId, {
@@ -32,8 +32,8 @@ const ProfilePage = ({
       <div className="mt-6 flex flex-col gap-6 max-md:items-center md:flex-row">
         <ProfileCard
           podcastData={podcastsData!}
-          // imageUrl={user?.imageUrl!}
-          // userFirstName={user?.name!}
+          imageUrl={user?.imageUrl!}
+          userFirstName={user?.name!}
         />
       </div>
       <section className="mt-9 flex flex-col gap-5">

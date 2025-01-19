@@ -60,6 +60,7 @@ const GenerateThumbnail = ({
   const generateImage = async () => {
     try {
       setIsImageLoading(true);
+      console.log("prompt1", imagePrompt)
       const response = await handleGenerateThumbnail({ prompt: imagePrompt });
       const blob = new Blob([response], { type: "image/png" });
       await handleImage(blob, `thumbnail-${uuidv4()}`);
@@ -73,7 +74,7 @@ const GenerateThumbnail = ({
       setIsImageLoading(false);
     }
   };
-  
+
   const uploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     try {
@@ -205,4 +206,3 @@ export default GenerateThumbnail;
 
 
 
- 

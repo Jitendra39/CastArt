@@ -143,59 +143,123 @@ export const generateAudioAction = action({
 //     return buffer; 
 //   }
 // })
-
- 
-
-
-
 export const generateThumbnailAction = action({
-  args: { prompt: v.string() },
+  args: { prompt: v.string() }, // Argument validation
   handler: async (_, { prompt }) => {
-    const url = 'https://text-to-image13.p.rapidapi.com/';
-    const options1 = {
+
+    const url = 'https://stable-diffusion9.p.rapidapi.com/styles'; // Adjust to correct endpoint
+    const rapidApiKey = process.env.RAPID_API_KEY;
+    const rapidApiHost = process.env.RAPID_API_HOST;
+    console.log("Prompt received:", {rapidApiKey ,prompt});
+
+    if (!rapidApiKey || !rapidApiHost) {
+      throw new Error("Missing RapidAPI key or host in environment variables");
+    }
+
+    // Request options
+    const options = {
       method: 'POST',
       headers: {
-        'x-rapidapi-key':`${process.env.STABLE_DIFFUSION}`,
-        'x-rapidapi-host': 'text-to-image13.p.rapidapi.com',
-        'Content-Type': 'application/json'
+        'x-rapidapi-key': rapidApiKey,
+        'x-rapidapi-host': rapidApiHost,
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ prompt })
+      body: JSON.stringify({
+        prompt, // The prompt provided by the user
+        width: 512, // Optional: Adjust image width
+        height: 512, // Optional: Adjust image height
+        steps: 50, // Optional: Number of steps (for image quality)
+      }),
     };
+
     try {
-      const response = await fetch(url, options1);
-      console.log(response)
+      // Fetch API call
+      const response = await fetch(url, options);
+
+      console.log('Response status:', response.status);
+      console.log('Response headers:', response.headers);
+
       if (!response.ok) {
-      throw new Error(`Error: ${response.statusText}`);
+        const errorDetails = await response.text(); // Capture error details from the body
+        throw new Error(`Error: ${response.statusText}. Details: ${errorDetails}`);
       }
 
-      const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('application/json')) {
       const result = await response.json();
-      const imageUrl = result.data?.[0]?.url;
+      console.log('Result JSON:', result);
+
+      const imageUrl = result.data?.[0]?.url; // Adjust to match the API response
       if (!imageUrl) {
-        throw new Error('Error generating thumbnail');
+        throw new Error('Error: No image URL found in the response.');
       }
 
+      // Fetch the image from the URL
       const imageResponse = await fetch(imageUrl);
       if (!imageResponse.ok) {
         throw new Error(`Error fetching image: ${imageResponse.statusText}`);
       }
+
       const buffer = await imageResponse.arrayBuffer();
-      return buffer;
-      } else if (contentType && contentType.includes('image/')) {
-      const buffer = await response.arrayBuffer();
-      return buffer;
-      } else {
-      throw new Error('Unexpected content type');
-      }
+      return buffer; // Return the raw image buffer
     } catch (error) {
-      console.error('Error generating and fetching image:', error);
+      if (error instanceof Error) {
+        console.error('Error generating and fetching image:', error.message);
+      } else {
+        console.error('Error generating and fetching image:', error);
+      }
       throw new Error('Failed to generate thumbnail');
     }
-    
-    
-  }
+  },
 });
+
+
+// export const generateThumbnailAction = action({
+//   args: { prompt: v.string() },
+//   handler: async (_, { prompt }) => {
+//     const url = 'https://text-to-image13.p.rapidapi.com/';
+//     const options1 = {
+//       method: 'POST',
+//       headers: {
+//         'x-rapidapi-key':`${process.env.STABLE_DIFFUSION}`,
+//         'x-rapidapi-host': 'text-to-image13.p.rapidapi.com',
+//         'Content-Type': 'application/json'
+//       },
+//       body: JSON.stringify({ prompt })
+//     };
+//     try {
+//       const response = await fetch(url, options1);
+//       console.log(response)
+//       if (!response.ok) {
+//       throw new Error(`Error: ${response.statusText}`);
+//       }
+
+//       const contentType = response.headers.get('content-type');
+//       if (contentType && contentType.includes('application/json')) {
+//       const result = await response.json();
+//       const imageUrl = result.data?.[0]?.url;
+//       if (!imageUrl) {
+//         throw new Error('Error generating thumbnail');
+//       }
+
+//       const imageResponse = await fetch(imageUrl);
+//       if (!imageResponse.ok) {
+//         throw new Error(`Error fetching image: ${imageResponse.statusText}`);
+//       }
+//       const buffer = await imageResponse.arrayBuffer();
+//       return buffer;
+//       } else if (contentType && contentType.includes('image/')) {
+//       const buffer = await response.arrayBuffer();
+//       return buffer;
+//       } else {
+//       throw new Error('Unexpected content type');
+//       }
+//     } catch (error) {
+//       console.error('Error generating and fetching image:', error);
+//       throw new Error('Failed to generate thumbnail');
+//     }
+    
+    
+//   }
+// });
 
 
 

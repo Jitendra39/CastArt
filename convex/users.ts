@@ -7,7 +7,10 @@ import { internalMutation, query } from "./_generated/server";
 export const getUserById = query({
   args: { clerkId: v.string() },
   handler: async (ctx, args) => {
+    console.log("clerkId",  args.clerkId)
+
     const user = await ctx.db
+
       .query("users")
       .filter((q) => q.eq(q.field("clerkId"), args.clerkId))
       .unique();
